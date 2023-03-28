@@ -1,11 +1,20 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { GET_FILM } from '../query';
+import { GET_FILM, GET_FILM_BY_ID } from '../query';
 import { useQuery } from '@apollo/client';
+import { useState } from 'react';
 export default function Home() {
   const { loading, error, data } = useQuery(GET_FILM);
-  console.log('data', data, loading);
+  const [id, setId] = useState();
+  const {
+    loading: loadingSingle,
+    error: errorSingle,
+    data: dataSingle,
+  } = useQuery(GET_FILM_BY_ID, {
+    variables: { filmId: id },
+  });
+  console.log('data', data, loading, id);
   return (
     <div className={styles.container}>
       <Head>
@@ -37,6 +46,7 @@ export default function Home() {
                     href='https://www.apollographql.com/docs/react/get-started'
                     target='_blank'
                     className={styles.card}
+                    onClick={() => setId(data.id)}
                   >
                     <h2>{data.title}</h2>
                     <p>{`Directed by ${data.director},`}</p>
