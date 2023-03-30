@@ -2,19 +2,24 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import { GET_FILM, GET_FILM_BY_ID } from '../query';
-import { useQuery } from '@apollo/client';
-import { useState } from 'react';
+import { useLazyQuery, useQuery } from '@apollo/client';
+import { Fragment, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 export default function Home() {
   const { loading, error, data } = useQuery(GET_FILM);
   const [id, setId] = useState();
-  const {
-    loading: loadingSingle,
-    error: errorSingle,
-    data: dataSingle,
-  } = useQuery(GET_FILM_BY_ID, {
+  const [
+    filmById,
+    { loading: loadingSingle, error: errorSingle, data: dataSingle },
+  ] = useLazyQuery(GET_FILM_BY_ID, {
     variables: { filmId: id },
   });
-  console.log('data', data, loading, id);
+  const [show, setShow] = useState(false);
+  // console.log('data', data, loading, id);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <div className={styles.container}>
       <Head>
@@ -26,50 +31,125 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={styles.title}>Welcome to GraphQL demo!!</h1>
 
-        {/*  <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p> */}
-
         <div className={styles.grid}>
-          {/* <a
-            href='https://www.apollographql.com/docs/react/get-started'
-            className={styles.card}
-          >
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about GraphQL features and API.</p>
-          </a> */}
-          {!loading && data?.allFilms?.films?.length > 0
-            ? data?.allFilms?.films.map((data) => (
-                <>
-                  <a
-                    href='https://www.apollographql.com/docs/react/get-started'
-                    target='_blank'
-                    className={styles.card}
-                    onClick={() => setId(data.id)}
-                  >
-                    <h2>{data.title}</h2>
-                    <p>{`Directed by ${data.director},`}</p>
-                    <p>{`It will be released to your near cinema hall on ${data.releaseDate}`}</p>
-                  </a>
-                </>
-              ))
-            : null}
+          {!loading && data?.allFilms?.films?.length > 0 ? (
+            data?.allFilms?.films.map((data, id) => (
+              <Fragment key={id}>
+                <a
+                  className={`${styles.card} card px-3 bg-transparent border rounded c-pointer`}
+                  onClick={() => {
+                    setId(data.id);
+                    filmById({ variables: { filmId: data.id } });
+                    handleShow();
+                  }}
+                >
+                  <div className='d-flex flex-column'>
+                    <h2 className='flex-grow-1'>{data.title}</h2>
+                    <p className='flex-grow-1'>{`Directed by ${data.director},`}</p>
+                    <p className='mt-2'>{`It will be released to your near cinema hall on ${data.releaseDate}`}</p>
+                  </div>
+                </a>
+              </Fragment>
+            ))
+          ) : (
+            <>
+              <a
+                className={`${styles.card} card px-3 bg-transparent border rounded`}
+              >
+                <div className='d-flex flex-column '>
+                  <h2 className='skeleton skeleton-text'></h2>
+                  <p className='skeleton skeleton-text-sub-title'></p>
+                  <p className='mt-2 skeleton skeleton-text-description'></p>
+                </div>
+              </a>
+              <a
+                className={`${styles.card} card px-3 bg-transparent border rounded`}
+              >
+                <div className='d-flex flex-column '>
+                  <h2 className='skeleton skeleton-text'></h2>
+                  <p className='skeleton skeleton-text-sub-title'></p>
+                  <p className='mt-2 skeleton skeleton-text-description'></p>
+                </div>
+              </a>
+              <a
+                className={`${styles.card} card px-3 bg-transparent border rounded`}
+              >
+                <div className='d-flex flex-column '>
+                  <h2 className='skeleton skeleton-text'></h2>
+                  <p className='skeleton skeleton-text-sub-title-big'></p>
+                  <p className='mt-2 skeleton skeleton-text-description'></p>
+                </div>
+              </a>
+              <a
+                className={`${styles.card} card px-3 bg-transparent border rounded`}
+              >
+                <div className='d-flex flex-column '>
+                  <h2 className='skeleton skeleton-text'></h2>
+                  <p className='skeleton skeleton-text-sub-title'></p>
+                  <p className='mt-2 skeleton skeleton-text-description'></p>
+                </div>
+              </a>
+              <a
+                className={`${styles.card} card px-3 bg-transparent border rounded`}
+              >
+                <div className='d-flex flex-column '>
+                  <h2 className='skeleton skeleton-text'></h2>
+                  <p className='skeleton skeleton-text-sub-title'></p>
+                  <p className='mt-2 skeleton skeleton-text-description'></p>
+                </div>
+              </a>
+              <a
+                className={`${styles.card} card px-3 bg-transparent border rounded`}
+              >
+                <div className='d-flex flex-column '>
+                  <h2 className='skeleton skeleton-text'></h2>
+                  <p className='skeleton skeleton-text-sub-title'></p>
+                  <p className='mt-2 skeleton skeleton-text-description'></p>
+                </div>
+              </a>
+            </>
+          )}
+          {!loadingSingle && dataSingle?.film?.title ? (
+            <Modal
+              show={show}
+              onHide={handleClose}
+              backdrop='static'
+              keyboard={false}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title className='text-dark'>
+                  {dataSingle?.film?.title}
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className='text-dark'>
+                {dataSingle?.film?.openingCrawl}
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant='secondary' onClick={handleClose}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          ) : (
+            <Modal
+              show={show}
+              onHide={handleClose}
+              backdrop='static'
+              keyboard={false}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title className='text-dark skeleton modal-skeleton-title'></Modal.Title>
+              </Modal.Header>
+              <Modal.Body className='text-dark skeleton modal-skeleton-body'></Modal.Body>
+              <Modal.Footer>
+                <Button variant='secondary' onClick={handleClose}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          )}
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src='/vercel.svg' alt='Vercel Logo' width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   );
 }

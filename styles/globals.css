@@ -15,12 +15,73 @@ a {
   box-sizing: border-box;
 }
 
+.skeleton {
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 80%);
+  }
+
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+.skeleton-text {
+  width: 266px;
+  height: 28.8px;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.skeleton-text-sub-title {
+  width: 266px;
+  height: 30px;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.skeleton-text-description {
+  width: 266px;
+  height: 60px;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.skeleton-text-sub-title-big {
+  width: 266px;
+  height: 60px;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.modal-skeleton-title {
+  width: 132.36px;
+  height: 36px;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.modal-skeleton-body {
+  width: 498px;
+  height: 224px;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.c-pointer:hover {
+  cursor: pointer;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
-    color-scheme: dark;
+    color-scheme: dark !important;
   }
+
   body {
-    color: white;
-    background: black;
+    color: white !important;
+    background: black !important;
   }
 }
