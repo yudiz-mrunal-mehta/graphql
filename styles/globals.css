@@ -65,7 +65,7 @@ a {
 }
 
 .modal-skeleton-body {
-  width: 498px;
+  width: 100%;
   height: 224px;
   margin-bottom: 0.5rem;
   border-radius: 0.25rem;
