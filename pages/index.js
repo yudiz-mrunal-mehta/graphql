@@ -16,7 +16,7 @@ export default function Home() {
     variables: { filmId: id },
   });
   const [show, setShow] = useState(false);
-  // console.log('data', data, loading, id);
+  console.log('data', data, loading, id);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);

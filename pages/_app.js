@@ -5,12 +5,12 @@ import {
   ApolloProvider,
   gql,
 } from '@apollo/client';
+const client = new ApolloClient({
+  uri: 'https://swapi-graphql.netlify.app/.netlify/functions/index',
+  // uri: 'https://flyby-router-demo.herokuapp.com/',
+  cache: new InMemoryCache(),
+});
 function MyApp({ Component, pageProps }) {
-  const client = new ApolloClient({
-    uri: 'https://swapi-graphql.netlify.app/.netlify/functions/index',
-    // uri: 'https://flyby-router-demo.herokuapp.com/',
-    cache: new InMemoryCache(),
-  });
   return (
     <ApolloProvider client={client}>
       <link
