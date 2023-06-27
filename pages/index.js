@@ -2,8 +2,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import { GET_FILM, GET_FILM_BY_ID } from '../query';
-import { useLazyQuery, useQuery } from '@apollo/client';
-import { Fragment, useState } from 'react';
+import { useApolloClient, useLazyQuery, useQuery } from '@apollo/client';
+import { Fragment, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 export default function Home() {
@@ -20,6 +20,30 @@ export default function Home() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const apolloClient = useApolloClient();
+  /* useEffect(() => {
+    const cachedData = apolloClient.readQuery({ query: GET_FILM });
+
+    const writeCache = apolloClient.writeQuery({
+      query: GET_FILM,
+      data: {
+        allFilms: {
+          films: [
+            ...data?.allFilms?.films,
+            {
+              __typename: 'Film',
+              id: '69',
+              title: 'A New Hope for getting 69',
+              director: 'Johnny Bhai',
+              releaseDate: '1977-05-25',
+            },
+          ],
+        },
+      },
+    });
+    console.log('cachedData', cachedData, data);
+  }, []); */
+
   return (
     <div className={styles.container}>
       <Head>
